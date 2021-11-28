@@ -11,4 +11,3 @@ O comando npm run dev irá gerar um link, bastando utilizar esse link para acess
 Ao iniciar o projeto cairá na tela SPA, bastando adicionar, editar ou remover algum item.  
 O campo Number é validado por CPF ou CNPJ, se vazio ou fora de formato não irá dar submit.  
 É possível fazer pesquisa, ocultar menu lateral, escolher total de itens por página, filtrar clicando em documento.
-
