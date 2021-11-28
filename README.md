@@ -3,6 +3,8 @@ Este teste foi desenvolvido utilizando Laravel no back-end e NuxtJs no front-end
 Detalhe: ambos os projetos precisam estar rodando simultaneamente.  
 No back-end php artisan serve  
 No front-end npm run dev  
+Caso vá clonar o projeto com git, use esse comando apos clonar para baixar a minha branch também:  
+git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
 
 # Utilização - back-end
 Para o projeto back-end funcionar são necessárias que as extensões do php estejam instaladas, postgresql instalado, composer instalado.  
