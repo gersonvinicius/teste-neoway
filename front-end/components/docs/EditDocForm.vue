@@ -63,7 +63,7 @@ export default Vue.extend({
       errorMessage: '', // Default dialog error message
       docData: this.doc as Doc,
       rules: {
-        required: (value: string) => !!value || 'Digite um cpf válido.',
+        required: (value: string) => !!value || 'Digite um cpf ou cnpj válido.',
       }
     }
   },

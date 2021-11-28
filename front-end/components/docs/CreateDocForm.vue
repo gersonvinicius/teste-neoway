@@ -61,7 +61,7 @@ export default Vue.extend({
         number: '',
       } as Doc,
       rules: {
-        required: (value: string) => !!value || 'Digite um cpf válido.',
+        required: (value: string) => !!value || 'Digite um cpf ou cnpj válido.',
       }
     }
   },
