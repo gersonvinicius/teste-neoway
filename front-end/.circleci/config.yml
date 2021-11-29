@@ -1,0 +1,37 @@
+defaults: &defaults
+  working_directory: ~/next-spa-example
+  docker:
+    - image: circleci/node:12
+
+version: 2.1
+
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Check node and npm version
+          command: echo "Node version $(node --version)" && echo "npm version $(npm --version)"
+      - run:
+          name: Setup environment variables
+          command: cp .circleci/.env.circleci .env
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run: npm ci
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+      - run:
+          name: Run lint
+          command: npm run lint
+      - run:
+          name: Run tests
+          command: npm run test
+      - persist_to_workspace:
+          root: ./
+          paths: ./

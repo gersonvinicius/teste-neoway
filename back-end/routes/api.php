@@ -19,3 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::resource('doc', 'App\Http\Controllers\Api\DocsController');
+Route::get('status', 'App\Http\Controllers\Api\MonitorsController@index');
