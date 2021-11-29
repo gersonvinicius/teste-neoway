@@ -55,8 +55,8 @@ export default Vue.extend({
   data () {
     return {
       dialog: false,
-      valid: true, // If the form is valid
-      errorMessage: '', // Default dialog error message
+      valid: true, // Se o formulário é valido
+      errorMessage: '', // mensagem padrão de erro
       docData: {
         number: '',
       } as Doc,
@@ -67,7 +67,7 @@ export default Vue.extend({
   },
   watch: {
     dialog (val: boolean) {
-      // Reset the form when the dialog was closed
+      // Reseta o form com as validações
       if (!val) {
         this.resetForm()
       }
@@ -84,21 +84,21 @@ export default Vue.extend({
       this.docData = {
         number: '',
       }
-
-      // Define type for the form. We doing this because we want typescript to understand the validator.
+      this.errorMessage = '';
+      // reseta o form com as validações
       const form = this.$refs.form as Vue & Validator
 
       form.resetValidation()
     },
 
-    // Save the user
+    // Salvando novo registro
     async save () {
-      // Define type for the form. We doing this because we want typescript to understand the validator.
+      // valida o form e se é um cpf ou cnpj
       const form = this.$refs.form as Vue & Validator
-
-      if (form.validate() && (cpf.isValid(this.docData.number) || cnpj.isValid(this.docData.number))) {
+      console.log(this.docData.number.length)
+      if (form.validate() && (cpf.isValid(this.docData.number) || cnpj.isValid(this.docData.number))  && (this.docData.number.length == 11 || this.docData.number.length == 14)) {
         try {
-          // Send the request to create the user to the api
+          // faz o post pra criar novo registro
           const response = await this.$axios.$post('http://127.0.0.1:8000/api/doc', {
             number: this.docData.number,
           })
@@ -108,13 +108,14 @@ export default Vue.extend({
           // Close the form
           this.close()
         } catch (error) {
-          // If we have a form validation error from the api
           if (error.response.status === 422) {
             this.valid = false
 
             const responseData = error.response.data.error
           }
         }
+      }else {
+        this.errorMessage = 'Verifique se o documento é válido e se não existe na lista.';
       }
     }
   }

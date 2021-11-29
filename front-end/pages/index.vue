@@ -49,7 +49,7 @@ export default Vue.extend({
   },
 
   async asyncData ({ app }) {
-    // Get all docs from the API
+    // trás todos os documentos via API
     const response = await app.$axios.$get('http://127.0.0.1:8000/api/doc')
     console.log(response)
     return {
@@ -76,8 +76,8 @@ export default Vue.extend({
   },
   methods: {
 
-    editDoc (doc: Doc) {
-      this.editDocIndex = this.docs.indexOf(doc) // @todo find a better way to do this
+    editDoc (doc: Doc) { // abre a tela de edit carregando o registro selecionado
+      this.editDocIndex = this.docs.indexOf(doc)
       this.editDocDialog = true
       this.docToEdit = Object.assign({}, doc)
     },
@@ -85,37 +85,38 @@ export default Vue.extend({
     async deleteDoc (doc: Doc) {
       if (confirm('Are you sure you want to delete this document?')) {
         try {
-          // Send the request to create the user to the api
+          // envia requisição pra excluir um registro
           await this.$axios.$delete('http://127.0.0.1:8000/api/doc/' + doc.id)
 
           this.$emit('docWasDeleted', doc)
 
           this.docs.splice(this.docs.indexOf(doc), 1)
 
-          // Add the user add the beginning of the users table list
-          // this.users.unshift(this.userData)
         } catch (error) {
           // todo do something
         }
       }
     },
 
-    onDocWasCreated (doc: Doc) {
-      console.log(doc)
-      this.docs.unshift(doc)
+    async onDocWasCreated (doc: Doc) {
+      // quando é criado um novo registro, ele carrega novamente todos
+      this.docs = await this.$axios.$get('http://127.0.0.1:8000/api/doc');
     },
 
     onDocWasUpdated (doc: Doc) {
+      // quando atualiza o registro
       Object.assign(this.docs[this.editDocIndex], doc)
       this.resetEditDoc()
     },
 
     onEditDocDialogClosed () {
+      // efeito abrir e fechar modal
       this.editDocDialog = false
       this.resetEditDoc()
     },
 
     resetEditDoc () {
+      // reseta os campos do modal
       this.editDocIndex = -1
       this.docToEdit = {
         number: '',
